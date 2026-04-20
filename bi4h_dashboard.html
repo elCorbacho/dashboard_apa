@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard BI4H — Anatomía Patológica UC Christus</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* The Precision Curator — Design Tokens */
+            --primary: #0e3566;
+            --primary-light: #1a4a7a;
+            --primary-dark: #091f4a;
+            --secondary: #48607d;
+            --tertiary: #003d33;
+            
+            --surface: #f8f9fa;
+            --surface-container-lowest: #ffffff;
+            --surface-container-low: #ecedee;
+            --surface-container: #e2e3e4;
+            --surface-container-high: #e7e8e9;
+            
+            --on-surface: #191c1d;
+            --on-surface-variant: #43474e;
+            --outline: #73777f;
+            --outline-variant: #c3c6cf;
+            
+            --error: #ba1a1a;
+            --error-container: #ffdad6;
+            --success: #006b5e;
+            --success-container: #b4f3ed;
+            --warning: #8a5a14;
+            --warning-container: #ffdea6;
+            
+            /* Area Colors */
+            --area-macro: #0e3566;
+            --area-inclusion: #8a5a14;
+            --area-medicos: #1a5a4f;
+            --area-laboratorio: #ba1a1a;
+            --area-citologia: #5a3d8a;
+            --area-molecular: #006874;
+            --area-adendum: #8a5a14;
+            
+            /* Typography */
+            --font-serif: Georgia, "Times New Roman", serif;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            
+            /* Elevation & Shadows */
+            --shadow-ambient: 0 12px 32px -4px rgba(25, 28, 29, 0.06);
+            --shadow-float: 0 16px 48px -8px rgba(25, 28, 29, 0.10);
+            --shadow-glow: 0 0 20px rgba(14, 53, 102, 0.15);
+            
+            /* Transitions - Extended */
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
+            
+/* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            
+            /* Component variables */
+            --surface-container-lowest: #ffffff;
+            --surface-container-low: #ecedee;
+            --surface-container-high: #e7e8e9;
+            --on-surface: #191c1d;
+            --on-surface-variant: #43474e;
+            --outline-variant: #c3c6cf;
+            --primary: #0e3566;
+            --secondary: #48607d;
+            --success: #006b5e;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
+            --radius-md: 10px;
+            --shadow-ambient: 0 12px 32px -4px rgba(25, 28, 29, 0.06);
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Base elements -FORCE LIGHT MODE */
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f8f9fa !important;
+            color: #191c1d !important;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 0 16px;
+        }
+
+/* Layout */
+        .app-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            grid-template-rows: 64px auto;
+            min-height: 100vh;
+            background: #f8f9fa;
+            width: 100%;
+            max-width: 1680px;
+            margin: 0 auto;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            grid-row: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            height: 64px;
+            background: #ecedee;
+            border-bottom: 1px solid #c3c6cf;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: #0e3566;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .header-title {
+            font-size: 1.35rem;
+            color: #0e3566;
+            font-family: Georgia, serif;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 0.75rem;
+            color: #43474e;
+            margin-left: 12px;
+            padding-left: 12px;
+            border-left: 1px solid #c3c6cf;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sync-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #43474e;
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #c3c6cf;
+        }
+
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            background: #006b5e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .aside {
+            grid-column: 1;
+            grid-row: 2;
+            background: #e7e8e9;
+            padding: 24px 0;
+            border-right: 1px solid #c3c6cf;
+            min-height: calc(100vh - 64px);
+            width: 240px;
+        }
+
+        .aside .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .aside .nav-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #43474e;
+            padding: 0 24px;
+            margin-bottom: 12px;
+        }
+
+        .aside .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: #48607d;
+            text-decoration: none;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .aside .nav-item:hover {
+            background: #ecedee;
+            color: #0e3566;
+        }
+
+        .aside .nav-item.active {
+            background: #0e3566;
+            color: white;
+        }
+
+        .aside .nav-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .main {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 18px 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* KPI Bar */
+        .kpi-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card {
+            background: var(--surface-container-lowest);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-ambient);
+            transition: all var(--transition-normal);
+            border: 1px solid transparent;
+        }
+
+        .kpi-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--success);
+            transition: width var(--transition-fast);
+        }
+
+        .kpi-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(
+                circle at top right,
+                rgba(0, 107, 94, 0.08) 0%,
+                transparent 70%
+            );
+            transition: opacity var(--transition-normal);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-float);
+            border-color: var(--outline-variant);
+        }
+
+        .kpi-card:hover::after {
+            opacity: 0;
+        }
+
+        .kpi-card.warning::before { background: var(--warning); }
+        .kpi-card.warning::after {
+            background: radial-gradient(
+                circle at top right,
+                rgba(138, 90, 20, 0.1) 0%,
+                transparent 70%
+            );
+        }
+
+        .kpi-card.critical::before { background: var(--error); }
+        .kpi-card.critical::after {
+            background: radial-gradient(
+                circle at top right,
+                rgba(187, 26, 26, 0.1) 0%,
+                transparent 70%
+            );
+        }
+
+        .kpi-label {
+            font-size: 0.7rem;
+            color: var(--on-surface-variant);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .kpi-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: var(--on-surface);
+            line-height: 1.1;
+            transition: color var(--transition-fast);
+        }
+
+        .kpi-card:hover .kpi-value {
+            color: var(--primary);
+        }
+
+        .kpi-subtext {
+            font-size: 0.75rem;
+            color: var(--on-surface-variant);
+            margin-top: 6px;
+        }
+
+        /* Entry animation */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kpi-card {
+            animation: slideInUp 0.5s ease forwards;
+            animation-delay: var(--animation-delay, 0s);
+            opacity: 0;
+        }
+
+        .kpi-card:nth-child(1) { --animation-delay: 0s; }
+        .kpi-card:nth-child(2) { --animation-delay: 0.1s; }
+        .kpi-card:nth-child(3) { --animation-delay: 0.15s; }
+        .kpi-card:nth-child(4) { --animation-delay: 0.2s; }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--surface-container-low);
+            padding: 12px 16px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            border: 1px solid var(--outline-variant);
+            transition: box-shadow var(--transition-normal);
+        }
+
+        .toolbar:focus-within {
+            box-shadow: var(--shadow-glow);
+            border-color: var(--primary);
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select {
+            appearance: none;
+            background: var(--surface-container-lowest);
+            border: 1px solid var(--outline-variant);
+            padding: 10px 36px 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            color: var(--on-surface);
+            cursor: pointer;
+            min-width: 150px;
+            transition: all var(--transition-fast);
+        }
+
+        .select:hover {
+            background: white;
+            border-color: var(--secondary);
+        }
+
+        .select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14, 53, 102, 0.1);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--on-surface-variant);
+            transition: transform var(--transition-fast);
+        }
+
+        .select:focus + .select-arrow {
+            transform: translateY(-50%) rotate(180deg);
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 50%
+            );
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary) 100%);
+            background-size: 200% 200%;
+            color: white;
+            box-shadow: 0 4px 16px rgba(14, 53, 102, 0.35);
+            transition: all var(--transition-normal);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(14, 53, 102, 0.45);
+            background-position: 100% 0;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--surface-container-lowest);
+            color: var(--on-surface);
+            border: 1px solid var(--outline-variant);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: var(--shadow-ambient);
+            transform: translateY(-1px);
+        }
+
+        .btn-icon {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Button loading state */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .btn.loading .btn-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .toolbar-spacer {
+            flex: 1;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            color: var(--on-surface);
+        }
+
+        /* Widgets Grid */
+        .widgets-section {
+            margin-bottom: 40px;
+        }
+
+        .widget-row {
+            margin-bottom: 16px;
+        }
+
+        .widget-row-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            padding: 8px 0 12px 16px;
+            border-left: 4px solid;
+            margin-bottom: 12px;
+        }
+
+        .widget-row-title {
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--on-surface);
+        }
+
+        .widget-row-subtitle {
+            font-size: 0.75rem;
+            color: var(--on-surface-variant);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .widget {
+            background: var(--surface-container-lowest);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            overflow: hidden;
+            /* Subtle gradient overlay */
+            background: linear-gradient(
+                135deg,
+                var(--surface-container-lowest) 0%,
+                var(--surface-container-lowest) 100%
+            );
+        }
+
+        .widget::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform var(--transition-bounce);
+        }
+
+        .widget::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                rgba(14, 53, 102, 0.02) 100%
+            );
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .widget:hover::before {
+            transform: scaleY(1);
+            transform-origin: bottom;
+        }
+
+        .widget:hover::after {
+            opacity: 1;
+        }
+
+        .widget:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-ambient);
+        }
+
+        .widget:active {
+            transform: translateY(-2px);
+            transition: transform 0.1s ease;
+        }
+
+        .widget.macro::before { background: var(--area-macro); }
+        .widget.inclusion::before { background: var(--area-inclusion); }
+        .widget.medicos::before { background: var(--area-medicos); }
+        .widget.laboratorio::before { background: var(--area-laboratorio); }
+
+        .widget-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .widget-number {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            background: var(--surface-container-low);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-sans);
+            letter-spacing: 0.02em;
+        }
+
+        .widget-label {
+            font-size: 0.8rem;
+            color: var(--on-surface-variant);
+            flex: 1;
+            line-height: 1.3;
+        }
+
+        .widget-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: var(--on-surface);
+            line-height: 1.1;
+            transition: color var(--transition-fast);
+        }
+
+        .widget:hover .widget-value {
+            color: var(--primary);
+        }
+
+        .widget-hint {
+            font-size: 0.7rem;
+            color: var(--on-surface-variant);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .widget.drilldown .widget-hint::after {
+            content: "→";
+            font-weight: 600;
+            transition: transform var(--transition-fast);
+        }
+
+        .widget:hover.drilldown .widget-hint::after {
+            transform: translateX(4px);
+        }
+
+        /* Value animation on load */
+        @keyframes valueReveal {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .widget-value {
+            animation: valueReveal 0.5s ease forwards;
+            animation-delay: var(--animation-delay, 0s);
+            opacity: 0;
+        }
+
+        .widget-placeholder {
+            background: transparent;
+            border-radius: var(--radius-lg);
+        }
+
+        /* Widget entrance animation */
+        .widget-row .widget {
+            animation: widgetSlideIn 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        @keyframes widgetSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Staggered delays per row */
+        .widget-row:nth-child(2) .widget:nth-child(1) { animation-delay: 0.05s; }
+        .widget-row:nth-child(2) .widget:nth-child(2) { animation-delay: 0.1s; }
+        .widget-row:nth-child(2) .widget:nth-child(3) { animation-delay: 0.15s; }
+        .widget-row:nth-child(2) .widget:nth-child(4) { animation-delay: 0.2s; }
+        .widget-row:nth-child(2) .widget:nth-child(5) { animation-delay: 0.25s; }
+
+        .widget-row:nth-child(3) .widget:nth-child(1) { animation-delay: 0.3s; }
+        .widget-row:nth-child(3) .widget:nth-child(2) { animation-delay: 0.35s; }
+        .widget-row:nth-child(3) .widget:nth-child(3) { animation-delay: 0.4s; }
+        .widget-row:nth-child(3) .widget:nth-child(4) { animation-delay: 0.45s; }
+        .widget-row:nth-child(3) .widget:nth-child(5) { animation-delay: 0.5s; }
+
+        .widget-row:nth-child(4) .widget:nth-child(1) { animation-delay: 0.55s; }
+        .widget-row:nth-child(4) .widget:nth-child(2) { animation-delay: 0.6s; }
+        .widget-row:nth-child(4) .widget:nth-child(3) { animation-delay: 0.65s; }
+        .widget-row:nth-child(4) .widget:nth-child(4) { animation-delay: 0.7s; }
+        .widget-row:nth-child(4) .widget:nth-child(5) { animation-delay: 0.75s; }
+
+        .widget-row:nth-child(5) .widget:nth-child(1) { animation-delay: 0.8s; }
+        .widget-row:nth-child(5) .widget:nth-child(2) { animation-delay: 0.85s; }
+        .widget-row:nth-child(5) .widget:nth-child(3) { animation-delay: 0.9s; }
+        .widget-row:nth-child(5) .widget:nth-child(4) { animation-delay: 0.95s; }
+        .widget-row:nth-child(5) .widget:nth-child(5) { animation-delay: 1s; }
+
+        /* Drilldown Table */
+        .drilldown-panel {
+            display: none;
+            background: var(--surface-container-low);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            grid-column: 1 / -1;
+        }
+
+        .drilldown-panel.open {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .drilldown-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .drilldown-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .drilldown-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--on-surface-variant);
+        }
+
+        .drilldown-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .drilldown-table th,
+        .drilldown-table td {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.8rem;
+        }
+
+        .drilldown-table th {
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            background: var(--surface-container-lowest);
+            border-radius: 8px;
+        }
+
+        .drilldown-table td {
+            background: var(--surface-container-lowest);
+            border-bottom: 1px solid var(--outline-variant);
+        }
+
+        .drilldown-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tech-pill.corte { background: #e3f2fd; color: #1565c0; }
+        .tech-pill.hq { background: #fff3e0; color: #e65100; }
+        .tech-pill.ihq { background: #f3e5f5; color: #7b1fa2; }
+        .tech-pill.if { background: #e8f5e9; color: #2e7d32; }
+        .tech-pill.electr { background: #eceff1; color: #546e7a; }
+        .tech-pill.molecular { background: #e0f7fa; color: #00838f; }
+
+        .drilldown-value {
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            cursor: pointer;
+            color: var(--primary);
+            transition: var(--transition-fast);
+        }
+
+        .drilldown-value:hover {
+            text-decoration: underline;
+        }
+
+        /* Area Cards */
+        .areas-section {
+            margin-bottom: 40px;
+        }
+
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .area-panel {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #c3c6cf;
+            overflow: hidden;
+        }
+
+        .area-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            cursor: pointer;
+            background: #ecedee;
+            transition: background 0.2s;
+        }
+
+        .area-panel-header:hover {
+            background: #e2e3e4;
+        }
+
+        .area-panel-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .area-panel-title {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #191c1d;
+        }
+
+        .area-panel-subtitle {
+            font-size: 0.75rem;
+            color: #43474e;
+        }
+
+        .area-panel-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .area-panel-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* Legacy area cards (hidden) */
+        .area-card {
+            background: var(--surface-container-lowest);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--outline-variant);
+        }
+
+        .area-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition-bounce);
+        }
+
+        .area-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                rgba(14, 53, 102, 0.02) 100%
+            );
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .area-card.macro::before { background: var(--area-macro); }
+        .area-card.inclusion::before { background: var(--area-inclusion); }
+        .area-card.hq::before { background: var(--area-inclusion); }
+        .area-card.ihq-if::before { background: var(--area-molecular); }
+        .area-card.molecular::before { background: var(--area-molecular); }
+        .area-card.citologia::before { background: var(--area-citologia); }
+        .area-card.adendum::before { background: var(--area-adendum); }
+
+        .area-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-ambient);
+            border-color: transparent;
+        }
+
+        .area-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .area-card:hover::after {
+            opacity: 1;
+        }
+
+        .area-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            font-size: 1.35rem;
+            transition: transform var(--transition-normal);
+        }
+
+        .area-card:hover .area-icon {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        .area-card.macro .area-icon { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); color: var(--area-macro); }
+        .area-card.inclusion .area-icon { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); color: var(--area-inclusion); }
+        .area-card.hq .area-icon { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); color: var(--area-inclusion); }
+        .area-card.ihq-if .area-icon { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: var(--area-molecular); }
+        .area-card.molecular .area-icon { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: var(--area-molecular); }
+        .area-card.citologia .area-icon { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); color: var(--area-citologia); }
+        .area-card.adendum .area-icon { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); color: var(--area-adendum); }
+
+        .area-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            transition: color var(--transition-fast);
+        }
+
+        .area-card:hover .area-title {
+            color: var(--primary);
+        }
+
+        .area-subtitle {
+            font-size: 0.75rem;
+            color: var(--on-surface-variant);
+        }
+
+        /* Area cards staggered animation */
+        .area-card {
+            animation: areaCardIn 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(16px);
+            animation-delay: var(--animation-delay, 0s);
+        }
+
+        @keyframes areaCardIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .areas-grid .area-card:nth-child(1) { --animation-delay: 0.1s; }
+        .areas-grid .area-card:nth-child(2) { --animation-delay: 0.15s; }
+        .areas-grid .area-card:nth-child(3) { --animation-delay: 0.2s; }
+        .areas-grid .area-card:nth-child(4) { --animation-delay: 0.25s; }
+        .areas-grid .area-card:nth-child(5) { --animation-delay: 0.3s; }
+        .areas-grid .area-card:nth-child(6) { --animation-delay: 0.35s; }
+        .areas-grid .area-card:nth-child(7) { --animation-delay: 0.4s; }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-float);
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(32px) scale(0.96); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--outline-variant);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(
+                180deg,
+                var(--surface-container-low) 0%,
+                var(--surface-container-lowest) 100%
+            );
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-family: var(--font-serif);
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--on-surface-variant);
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+
+        .modal-close::before {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            background: currentColor;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: var(--surface-container-low);
+            color: var(--on-surface);
+        }
+
+        .modal-close:hover::before {
+            opacity: 0.1;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface-container-low);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-value.critical { color: var(--error); }
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--on-surface-variant);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 4px;
+        }
+
+        /* Filters */
+        .filters-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            appearance: none;
+            background: var(--surface-container-lowest);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--on-surface);
+        }
+
+        .search-input:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .search-input::placeholder {
+            color: var(--on-surface-variant);
+        }
+
+        /* Data Table */
+        .data-table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--outline-variant);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .data-table th {
+            background: var(--surface-container-low);
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.04em;
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table.block-table th {
+            color: #ffffff;
+            text-transform: none;
+            font-size: 0.8rem;
+            letter-spacing: 0;
+        }
+
+        .data-table.block-table.phase-inicio th {
+            background: #0ea5da;
+        }
+
+        .data-table.block-table.phase-incluido th {
+            background: #f4b400;
+        }
+
+        .data-table.medical-table th {
+            background: #05a84f;
+            color: #ffffff;
+            text-transform: none;
+            font-size: 0.8rem;
+            letter-spacing: 0;
+        }
+
+        .data-table.medical-table td {
+            background: #f3f4f6;
+            font-size: 0.78rem;
+            padding: 8px 10px;
+        }
+
+        .data-table.tech-table th {
+            background: #0ea5da;
+            color: #ffffff;
+            text-transform: none;
+            font-size: 0.8rem;
+            letter-spacing: 0;
+        }
+
+        .data-table.tech-table td {
+            background: #f3f4f6;
+            font-size: 0.8rem;
+            padding: 8px 10px;
+        }
+
+        .data-table.block-table td {
+            background: #f3f4f6;
+            font-size: 0.78rem;
+            padding: 8px 10px;
+        }
+
+        .is-hidden {
+            display: none !important;
+        }
+
+        .data-table td {
+            background: var(--surface-container-lowest);
+            border-bottom: 1px solid var(--outline-variant);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tbody tr {
+            transition: var(--transition-fast);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--surface-container-low);
+        }
+
+        .case-type {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            font-family: monospace;
+        }
+
+        .case-type.biopsy { background: #e3f2fd; color: #1565c0; }
+        .case-type.citologia { background: #f3e5f5; color: #7b1fa2; }
+        .case-type.interconsulta { background: #fff3e0; color: #e65100; }
+        .case-type.externa { background: #e8f5e9; color: #2e7d32; }
+        .case-type.molecular { background: #e0f7fa; color: #00838f; }
+        .case-type.autopsia { background: #ffebee; color: #c62828; }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .phase-badge.inicio { background: #e3f2fd; color: #1565c0; }
+        .phase-badge.macro { background: #fff3e0; color: #e65100; }
+        .phase-badge.pagado { background: #e8f5e9; color: #2e7d32; }
+        .phase-badge.cortado { background: #f3e5f5; color: #7b1fa2; }
+        .phase-badge.diagnostico { background: #e0f7fa; color: #00838f; }
+        .phase-badge.firma { background: #fce4ec; color: #ad1457; }
+
+        .days-cell {
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+        }
+
+        .days-cell.critical {
+            color: var(--error);
+        }
+
+        .days-cell.warning {
+            color: var(--warning);
+        }
+
+        /* Modal Actions */
+        .modal-actions {
+            padding: 16px 24px;
+            border-top: 1px solid var(--outline-variant);
+            display: flex;
+            justify-content: space-between;
+            background: var(--surface-container-low);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .widgets-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .areas-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .kpi-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 64px auto auto;
+            }
+            .aside {
+                display: none;
+            }
+            .main {
+                grid-column: 1;
+                grid-row: 3;
+            }
+            .widgets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .areas-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .widget-row-header {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .widgets-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .areas-grid {
+                grid-template-columns: 1fr;
+            }
+            .kpi-bar {
+                grid-template-columns: 1fr;
+            }
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .header-subtitle {
+                display: none;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toolbar-group {
+                width: 100%;
+            }
+            .select {
+                width: 100%;
+            }
+            
+            /* Adjustments */
+            .section-title {
+                font-size: 1rem;
+            }
+            .widget {
+                padding: 16px;
+            }
+            .widget-value {
+                font-size: 1.75rem;
+            }
+            .widget-label {
+                font-size: 0.7rem;
+            }
+            .kpi-value {
+                font-size: 1.75rem;
+            }
+            .area-card {
+                padding: 16px;
+            }
+            
+            /* Buttons full width on mobile */
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 400px) {
+            .kpi-bar {
+                grid-template-columns: 1fr;
+            }
+            .widgets-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-overlay {
+                padding: 12px;
+            }
+            .modal-header,
+            .modal-body,
+            .modal-actions {
+                padding: 16px;
+            }
+        }
+
+        /* Touch devices optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .widget:hover {
+                transform: none;
+            }
+            .area-card:hover {
+                transform: none;
+            }
+            .kpi-card:hover {
+                transform: none;
+            }
+            .btn-primary:hover {
+                transform: none;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .aside,
+            .toolbar,
+            .btn,
+            .modal-actions {
+                display: none !important;
+            }
+            .app-container {
+                display: block;
+            }
+            .main {
+                padding: 0;
+            }
+            .widget,
+            .area-card,
+            .kpi-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+
+        /* Utility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">UC</div>
+                <h1 class="header-title">Dashboard BI4H</h1>
+                <span class="header-subtitle">Anatomía Patológica — Red UC Christus</span>
+            </div>
+            <div class="header-right">
+                <div class="sync-badge">
+                    <span class="sync-dot"></span>
+                    <span>Sincronizado</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Aside -->
+        <aside class="aside">
+            <nav class="nav-section">
+                <div class="nav-label">Navegación</div>
+                <a class="nav-item active" data-section="overview">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    Overview
+                </a>
+                <a class="nav-item" data-section="widgets">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                    Widgets
+                </a>
+                <a class="nav-item" data-section="areas">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Áreas
+                </a>
+                <a class="nav-item" data-section="tecnicas">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    Técnicas
+                </a>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-label">Acciones</div>
+                <a class="nav-item" id="exportBtn">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Exportar
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <!-- KPI Bar -->
+            <section class="kpi-bar">
+                <div class="kpi-card">
+                    <div class="kpi-label">Casos Activos</div>
+                    <div class="kpi-value tabular">1,247</div>
+                    <div class="kpi-subtext">Últimos 30 días</div>
+                </div>
+                <div class="kpi-card warning">
+                    <div class="kpi-label">Alarmas Abiertas</div>
+                    <div class="kpi-value tabular">23</div>
+                    <div class="kpi-subtext">Widgets sobre umbral</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">TAT Promedio</div>
+                    <div class="kpi-value tabular">4.2 <small style="font-size:0.5em">días</small></div>
+                    <div class="kpi-subtext">Ingreso → Firma</div>
+                </div>
+                <div class="kpi-card critical">
+                    <div class="kpi-label">Adendum Pendientes</div>
+                    <div class="kpi-value tabular">154</div>
+                    <div class="kpi-subtext">Sin firmar</div>
+                </div>
+            </section>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="toolbar-group">
+                    <span class="toolbar-label">Área:</span>
+                    <div class="select-wrapper">
+                        <select class="select" id="filterArea">
+                            <option value="">Todas las áreas</option>
+                            <option value="macro">Macroscopía</option>
+                            <option value="inclusion">Inclusión/Corte</option>
+                            <option value="hq">Histoquímicas</option>
+                            <option value="ihq-if">IHQ/IF</option>
+                            <option value="molecular">Molecular</option>
+                            <option value="citologia">Citología</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="toolbar-group">
+                    <span class="toolbar-label">Umbral:</span>
+                    <div class="select-wrapper">
+                        <select class="select" id="filterThreshold">
+                            <option value="3">> 3 días</option>
+                            <option value="5">> 5 días</option>
+                            <option value="7" selected>> 7 días</option>
+                            <option value="14">> 14 días</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="toolbar-group">
+                    <span class="toolbar-label">Patólogo:</span>
+                    <div class="select-wrapper">
+                        <select class="select" id="filterPathologist">
+                            <option value="">Todos</option>
+                            <option value="Dr. Rivas">Dr. Rivas</option>
+                            <option value="Dra. Pérez">Dra. Pérez</option>
+                            <option value="Dr. Muñoz">Dr. Muñoz</option>
+                            <option value="Dra. Soto">Dra. Soto</option>
+                            <option value="Dr. Lara">Dr. Lara</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="toolbar-spacer"></div>
+                <button class="btn btn-secondary">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Actualizar
+                </button>
+                <button class="btn btn-primary">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Exportar
+                </button>
+            </div>
+
+            <!-- Widgets Section -->
+            <section class="widgets-section">
+                <div class="section-header">
+                    <h2 class="section-title">Monitoreo de Alarmas — 16 Widgets</h2>
+                </div>
+                
+                <!-- Fila 1: Casetes -->
+                <div class="widget-row">
+                    <div class="widget-row-header" style="border-left-color: var(--area-macro);">
+                        <span class="widget-row-title">Casetes</span>
+                        <span class="widget-row-subtitle">Macroscopía</span>
+                    </div>
+                    <div class="widgets-grid" id="widgetsRow1"></div>
+                </div>
+                
+                <!-- Fila 2: Bloques -->
+                <div class="widget-row">
+                    <div class="widget-row-header" style="border-left-color: var(--area-inclusion);">
+                        <span class="widget-row-title">Bloques</span>
+                        <span class="widget-row-subtitle">Inclusión</span>
+                    </div>
+                    <div class="widgets-grid" id="widgetsRow2"></div>
+                </div>
+                
+                <!-- Fila 3: Casos Médicos -->
+                <div class="widget-row">
+                    <div class="widget-row-header" style="border-left-color: var(--area-medicos);">
+                        <span class="widget-row-title">Casos</span>
+                        <span class="widget-row-subtitle">Médicos</span>
+                    </div>
+                    <div class="widgets-grid" id="widgetsRow3"></div>
+                </div>
+                
+                <!-- Fila 4: Láminas -->
+                <div class="widget-row">
+                    <div class="widget-row-header" style="border-left-color: var(--area-laboratorio);">
+                        <span class="widget-row-title">Láminas</span>
+                        <span class="widget-row-subtitle">Laboratorio</span>
+                    </div>
+                    <div class="widgets-grid" id="widgetsRow4"></div>
+                </div>
+                
+                <div class="drilldown-panel" id="drilldownPanel">
+                    <div class="drilldown-header">
+                        <span class="drilldown-title" id="drilldownTitle">Desglose por Técnica</span>
+                        <button class="drilldown-close" id="drilldownClose">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <table class="drilldown-table">
+                        <thead>
+                            <tr>
+                                <th>Técnica</th>
+                                <th>Láminas</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drilldownBody">
+                            <!-- Will be rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" role="dialog" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Casos</h2>
+                <button class="modal-close" id="modalClose" aria-label="Cerrar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-row" id="modalStats">
+                    <!-- Stats will be rendered by JS -->
+                </div>
+                <div class="filters-row" id="modalFiltersRow">
+                    <div class="select-wrapper">
+                        <select class="select" id="modalFilterAssignedPathologist">
+                            <option value="">Patólogo asignado (todos)</option>
+                            <option value="Dr. Rivas">Dr. Rivas</option>
+                            <option value="Dra. Pérez">Dra. Pérez</option>
+                            <option value="Dr. Muñoz">Dr. Muñoz</option>
+                            <option value="Dra. Soto">Dra. Soto</option>
+                            <option value="Dr. Lara">Dr. Lara</option>
+                            <option value="AS">AS</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <div class="select-wrapper">
+                        <select class="select" id="modalFilterOrganType">
+                            <option value="">Tipo de órgano (todos)</option>
+                            <option value="Pancreas">Pancreas</option>
+                            <option value="Pancreas, apendice, estomago, colon">Pancreas, apendice, estomago, colon</option>
+                            <option value="Ginecológico">Ginecológico</option>
+                            <option value="Digestivo">Digestivo</option>
+                            <option value="Dermatológico">Dermatológico</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <div class="select-wrapper">
+                        <select class="select" id="modalFilterCaseType">
+                            <option value="">Tipo de caso (todos)</option>
+                            <option value="#B#">#B# Biopsia</option>
+                            <option value="#C#">#C# Citología</option>
+                            <option value="#I#">#I# Interconsulta</option>
+                            <option value="#BE#">#BE# Biopsia externa</option>
+                            <option value="#PM#">#PM# Pat. Molecular</option>
+                            <option value="#A#">#A# Autopsia</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <div class="select-wrapper">
+                        <select class="select" id="modalFilterMacroPathologist">
+                            <option value="">Patólogo macro (todos)</option>
+                            <option value="RG">RG</option>
+                            <option value="AS">AS</option>
+                            <option value="Dr. Rivas">Dr. Rivas</option>
+                            <option value="Dra. Pérez">Dra. Pérez</option>
+                            <option value="Dr. Muñoz">Dr. Muñoz</option>
+                        </select>
+                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <input type="text" class="search-input" id="modalSearch" placeholder="Buscar N° caso...">
+                </div>
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead id="modalTableHead">
+                            <tr>
+                                <th>N° caso</th>
+                                <th>Paciente / Servicio</th>
+                                <th>Tipo</th>
+                                <th>Fase</th>
+                                <th>Patólogo</th>
+                                <th>Días</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalTableBody">
+                            <!-- Will be rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="modalExport">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Exportar CSV
+                </button>
+                <button class="btn btn-primary" id="modalViewHistory">
+                    Ver historial completo
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Seeded random for deterministic data
+        function createSeededRandom(seed) {
+            let s = seed;
+            return function() {
+                s = (s * 9301 + 49297) % 233280;
+                return s / 233280;
+            };
+        }
+
+        // Data generators
+        const servicios = ["Cirugía general", "Ginecología", "GI", "Dermatología", "Urología", "Mama", "Tórax"];
+        const patologos = ["Dr. Rivas", "Dra. Pérez", "Dr. Muñoz", "Dra. Soto", "Dr. Lara"];
+        const fases = ["Inicio", "Macroscopía", "Pagado", "Cortado", "Diagnóstico", "Firma"];
+        const nombres = ["A. M.", "J. P.", "M. R.", "C. S.", "L. F.", "R. T.", "G. H.", "K. L."];
+        const tipos = ["#B#", "#C#", "#I#", "#BE#", "#PM#", "#A#"];
+
+        function generateCases(seed, count) {
+            const rand = createSeededRandom(seed);
+            const cases = [];
+            for (let i = 0; i < count; i++) {
+                const year = 25 + Math.floor(rand() * 2);
+                const num = 10000 + Math.floor(rand() * 89999);
+                const tipo = tipos[Math.floor(rand() * tipos.length)];
+                cases.push({
+                    id: `${tipo.replace('#', '')}-${year}-${num}`,
+                    tipo: tipo,
+                    tipoCaso: tipo,
+                    paciente: `Paciente ${nombres[Math.floor(rand() * nombres.length)]}`,
+                    servicio: servicios[Math.floor(rand() * servicios.length)],
+                    tipoOrgano: 'Pancreas',
+                    fase: fases[Math.floor(rand() * fases.length)],
+                    patologo: patologos[Math.floor(rand() * patologos.length)],
+                    patologoAsignado: patologos[Math.floor(rand() * patologos.length)],
+                    patologoMacro: patologos[Math.floor(rand() * patologos.length)],
+                    dias: 1 + Math.floor(rand() * 20)
+                });
+            }
+            return cases;
+        }
+
+        function generateBlockRows(widgetId) {
+            const isInicio = widgetId >= 1 && widgetId <= 5;
+            const phase = isInicio ? 'inicio' : 'incluido';
+            const startDelay = isInicio ? 20 : 4;
+            const rows = [];
+            for (let i = 0; i < 16; i++) {
+                rows.push({
+                    bloque: i === 0 ? 'B22-19211-1-A' : 'B22-19211-2-B',
+                    tipoBloque: 'HE',
+                    organo: 'Pancreas',
+                    tipoOrgano: 'Pancreas',
+                    tipoCaso: '#B#',
+                    patologo: 'AS',
+                    patologoAsignado: 'AS',
+                    patologoMacro: 'RG',
+                    becado: 'CA',
+                    faseBloque: phase,
+                    fechaInicialBloque: '30/08/2021',
+                    diasRetraso: startDelay + i
+                });
+            }
+            return rows;
+        }
+
+        function generateMedicalRows(widgetId) {
+            const phaseByWidget = {
+                8: 'macroscopia',
+                9: 'procesamiento',
+                10: 'laminas distribuidas',
+                11: 'diagnostico',
+                12: 'adendum'
+            };
+            const phase = phaseByWidget[widgetId] || 'laminas distribuidas';
+            const startDelay = widgetId === 12 ? 10 : 4;
+            const rows = [];
+
+            for (let i = 0; i < 16; i++) {
+                rows.push({
+                    caso: `B22-${19019 + i}`,
+                    organo: 'Pancreas, apendice, estomago, colon',
+                    tipoOrgano: 'Pancreas, apendice, estomago, colon',
+                    tipoCaso: '#B#',
+                    patologoAsignado: 'AS',
+                    becado: 'CA',
+                    patologoAdendum: 'RG',
+                    patologoMacro: 'RG',
+                    faseCaso: phase,
+                    fechaFase: '30-08-2021',
+                    diasRetraso: startDelay + i
+                });
+            }
+
+            return rows;
+        }
+
+// Widgets data (organized by rows as per user request)
+        const widgetsRow1 = [ // Casetes: 1-5
+            { id: 1, area: 'macro', label: 'Casetes en inicio', value: 50, threshold: 4 },
+            { id: 2, area: 'macro', label: 'Casetes impresos', value: 160, threshold: 3 },
+            { id: 3, area: 'macro', label: 'Casetes sin procesar', value: 38, threshold: 2 },
+            { id: 4, area: 'macro', label: 'Casetes en el procesador', value: 6, threshold: 1 },
+            { id: 5, area: 'macro', label: 'Casetes sin incluir', value: 41, threshold: 2 }
+        ];
+        
+        const widgetsRow2 = [ // Bloques: 6-7 (with empty slots for alignment)
+            { id: 6, area: 'inclusion', label: 'Bloques sin retirar', value: 8, threshold: 3 },
+            { id: 7, area: 'inclusion', label: 'Bloques sin cortar', value: 38, threshold: 2 },
+            null, // placeholder
+            null, // placeholder
+            null  // placeholder
+        ];
+        
+        const widgetsRow3 = [ // Casos médicos: 8-12
+            { id: 8, area: 'medicos', label: 'Casos sin macroscopía', value: 40, threshold: 3 },
+            { id: 9, area: 'medicos', label: 'Casos sin procesar', value: 17, threshold: 4 },
+            { id: 10, area: 'medicos', label: 'Casos sin microscopía', value: 71, threshold: 5 },
+            { id: 11, area: 'medicos', label: 'Casos sin firmar', value: 29, threshold: 5 },
+            { id: 12, area: 'medicos', label: 'Adendum sin firmar', value: 154, threshold: 7 }
+        ];
+        
+        const widgetsRow4 = [ // Láminas: 13-16 (all with drilldown)
+            { id: 13, area: 'laboratorio', label: 'Láminas en inicio', value: 238, threshold: 2, drilldown: true },
+            { id: 14, area: 'laboratorio', label: 'Láminas adicionales inicio', value: 82, threshold: 2, drilldown: true },
+            { id: 15, area: 'laboratorio', label: 'Láminas pagadas sin cortar', value: 41, threshold: 2, drilldown: true },
+            { id: 16, area: 'laboratorio', label: 'Láminas sin distribuir', value: 204, threshold: 2, drilldown: true },
+            null  // placeholder
+        ];
+        
+        const allWidgets = [...widgetsRow1, ...widgetsRow2.filter(w => w), ...widgetsRow3, ...widgetsRow4.filter(w => w)];
+
+        // Tech breakdown data (from PRD section 8.2)
+        const techBreakdownData = {
+            13: { CORTE: 101, HQ: 20, IHQ: 54, IF: 28, ELECTR: 2, MOLECULAR: 3 },
+            14: { CORTE: 20, HQ: 43, IHQ: 28, IF: 10, ELECTR: 5, MOLECULAR: 50 },
+            15: { CORTE: 31, HQ: 67, IHQ: 79, IF: 15, ELECTR: 10, MOLECULAR: 26 },
+            16: { CORTE: 304, HQ: 71, IHQ: 105, IF: 31, ELECTR: 3, MOLECULAR: 21 }
+        };
+
+        const techDescriptions = {
+            CORTE: 'Corte estándar · rutina diaria',
+            HQ: 'Histoquímicas · tinciones especiales',
+            IHQ: 'Inmunohistoquímica · anticuerpos',
+            IF: 'Inmunofluorescencia · directa/indirecta',
+            ELECTR: 'Microscopía electrónica',
+            MOLECULAR: 'NGS, FISH, PCR, metiloma'
+        };
+
+        // Area cards data
+        const areasData = [
+            { id: 'macro', title: 'Macroscopía', subtitle: '11 indicadores', icon: '🔬', area: 'macro' },
+            { id: 'inclusion', title: 'Inclusión y corte', subtitle: '6 indicadores', icon: '🧪', area: 'inclusion' },
+            { id: 'hq', title: 'Histoquímicas', subtitle: '5 indicadores', icon: '🎨', area: 'hq' },
+            { id: 'ihq-if', title: 'IHQ e IF', subtitle: '7 indicadores', icon: '🔍', area: 'ihq-if' },
+            { id: 'molecular', title: 'Patología Molecular', subtitle: '8 indicadores', icon: '🧬', area: 'molecular' },
+            { id: 'citologia', title: 'Citología', subtitle: '8 indicadores', icon: '🦠', area: 'citologia' },
+            { id: 'adendum', title: 'Adendum', subtitle: '10 indicadores', icon: '📋', area: 'adendum' }
+        ];
+
+        // Area indicators (mock)
+        const areaIndicators = {
+            macro: [
+                { label: 'Casos en ingreso', value: 45 },
+                { label: 'Casos piel ingresados', value: 12 },
+                { label: 'Casos endoscópicos ingresados', value: 8 },
+                { label: 'Casos blocks ingresados', value: 156 },
+                { label: 'Casos benigna ingresados', value: 23 },
+                { label: 'Casos becados', value: 5 },
+                { label: 'Casos en macroscopía', value: 18 },
+                { label: 'Bloques encasetados', value: 234 },
+                { label: 'Bloques en el procesador', value: 67 },
+                { label: 'Bloques procesados', value: 892 },
+                { label: 'Vacante', value: 0 }
+            ],
+            inclusion: [
+                { label: 'Casetes en inclusión', value: 34 },
+                { label: 'Casetes incluidos por cortar', value: 89 },
+                { label: 'Láminas por cortar', value: 156 },
+                { label: 'Láminas por distribuir', value: 203 },
+                { label: 'Total tacos cortados anual', value: 12456 },
+                { label: 'Total láminas cortadas anual', value: 45678 }
+            ],
+            hq: [
+                { label: 'Músculos por cortar', value: 12 },
+                { label: 'Láminas HQ por cortar', value: 45 },
+                { label: 'Láminas HQ por distribuir', value: 67 },
+                { label: 'Total tacos cortados anual (HQ)', value: 2345 },
+                { label: 'Total láminas cortadas anual (HQ)', value: 8901 }
+            ],
+            'ihq-if': [
+                { label: 'Casos con IF por hacer', value: 8 },
+                { label: 'Casos con IF por distribuir', value: 15 },
+                { label: 'Láminas de IHQ pagadas', value: 234 },
+                { label: 'Láminas de IHQ por cortar', value: 89 },
+                { label: 'Láminas de IHQ por distribuir', value: 112 },
+                { label: 'Total IF distribuido anual', value: 456 },
+                { label: 'Total IHQ distribuido anual', value: 3456 }
+            ],
+            molecular: [
+                { label: 'Casos PM en inicio', value: 23 },
+                { label: 'Casos PM en pagado', value: 45 },
+                { label: 'Casos PM pagado (metiloma)', value: 8 },
+                { label: 'Casos PM pagado (NGS)', value: 12 },
+                { label: 'Casos PM pagado (PCR)', value: 15 },
+                { label: 'Casos PM pagado (FISH)', value: 10 },
+                { label: 'Casos PM en cortado', value: 34 },
+                { label: 'Adendum con PM sin firmar', value: 7 }
+            ],
+            citologia: [
+                { label: 'Citología ginecológica en inicio', value: 56 },
+                { label: 'Citología ginecológica en diagnóstico', value: 34 },
+                { label: 'Citología ginecológica en firma', value: 29 },
+                { label: 'Citología no ginecológica en inicio', value: 23 },
+                { label: 'Citología no ginecológica en diagnóstico', value: 18 },
+                { label: 'Citología no golecológica en firma', value: 12 },
+                { label: 'Total cito ginecológica anual', value: 4567 },
+                { label: 'Total cito no ginecológica anual', value: 1234 }
+            ],
+            adendum: [
+                { label: 'Adendum sin firmar', value: 154 },
+                { label: 'Adendum sin firmar > X días', value: 67 },
+                { label: 'Adendum con IHQ sin firmar', value: 23 },
+                { label: 'Adendum con PM sin firmar', value: 7 },
+                { label: 'Adendum con HQ sin firmar', value: 12 },
+                { label: 'Otros adendum sin firmar', value: 45 },
+                { label: 'Adendum con PM pendiente', value: 34 },
+                { label: 'Adendum con IHQ pendiente', value: 56 },
+                { label: 'Adendum por patólogo', value: 78 },
+                { label: 'Adendum por patólogo > X días', value: 23 }
+            ]
+        };
+
+        // Render widgets in 4 rows
+        function renderWidgets() {
+            // Row 1: Casetes (1-5)
+            const row1 = document.getElementById('widgetsRow1');
+            row1.innerHTML = widgetsRow1.map(w => createWidgetHTML(w)).join('');
+            
+            // Row 2: Bloques (6-7)
+            const row2 = document.getElementById('widgetsRow2');
+            row2.innerHTML = widgetsRow2.map(w => w ? createWidgetHTML(w) : '<div class="widget-placeholder"></div>').join('');
+            
+            // Row 3: Casos médicos (8-12)
+            const row3 = document.getElementById('widgetsRow3');
+            row3.innerHTML = widgetsRow3.map(w => createWidgetHTML(w)).join('');
+            
+            // Row 4: Láminas (13-16)
+            const row4 = document.getElementById('widgetsRow4');
+            row4.innerHTML = widgetsRow4.map(w => w ? createWidgetHTML(w) : '<div class="widget-placeholder"></div>').join('');
+        }
+
+        function createWidgetHTML(w) {
+            if (!w) return '';
+            return `
+                <div class="widget ${w.area} ${w.drilldown ? 'drilldown' : ''}" 
+                     data-id="${w.id}" 
+                     data-drilldown="${w.drilldown || false}"
+                     onclick="handleWidgetClick(${w.id}, ${w.drilldown || false})">
+                    <div class="widget-header">
+                        <span class="widget-number">${String(w.id).padStart(2, '0')}</span>
+                        <span class="widget-label">${w.label}</span>
+                    </div>
+                    <div class="widget-value">${w.value.toLocaleString('es-CL')}</div>
+                    <div class="widget-hint">> ${w.threshold} días</div>
+                </div>
+            `;
+        }
+
+        // Render area as expandable panels
+        function renderAreas() {
+            const grid = document.getElementById('areasGrid');
+            grid.innerHTML = areasData.map(a => {
+                const indicators = areaIndicators[a.id] || [];
+                const rows = indicators.map(ind => `
+                    <tr>
+                        <td style="padding: 8px 12px; border-bottom: 1px solid #e7e8e9;">${ind.label}</td>
+                        <td style="padding: 8px 12px; border-bottom: 1px solid #e7e8e9; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">${ind.value.toLocaleString('es-CL')}</td>
+                    </tr>
+                `).join('');
+                
+                return `
+                    <div class="area-panel">
+                        <div class="area-panel-header" onclick="toggleAreaPanel('${a.id}')">
+                            <div class="area-panel-icon">${a.icon}</div>
+                            <div class="area-panel-title">${a.title}</div>
+                            <div class="area-panel-subtitle">${a.subtitle}</div>
+                            <svg class="area-panel-arrow" id="arrow-${a.id}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                        <div class="area-panel-content" id="panel-${a.id}" style="display: none;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                                ${rows}
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleAreaPanel(areaId) {
+            const panel = document.getElementById('panel-' + areaId);
+            const arrow = document.getElementById('arrow-' + areaId);
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                panel.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Handle widget click
+        let currentWidgetId = null;
+
+        function handleWidgetClick(id, hasDrilldown) {
+            if (hasDrilldown) {
+                openTechModal(id);
+            } else if (id >= 1 && id <= 7) {
+                openBlockModal(id);
+            } else if (id >= 8 && id <= 12) {
+                openMedicalCaseModal(id);
+            } else {
+                openCaseModal(id, null);
+            }
+        }
+
+        // Toggle drilldown panel
+        function toggleDrilldown(widgetId) {
+            const panel = document.getElementById('drilldownPanel');
+            const title = document.getElementById('drilldownTitle');
+            const body = document.getElementById('drilldownBody');
+            
+            if (panel.classList.contains('open') && currentWidgetId === widgetId) {
+                panel.classList.remove('open');
+                currentWidgetId = null;
+                return;
+            }
+
+            currentWidgetId = widgetId;
+            const data = techBreakdownData[widgetId];
+            const total = Object.values(data).reduce((a, b) => a + b, 0);
+            
+            title.textContent = `Desglose por Técnica — Widget ${String(widgetId).padStart(2, '0')}`;
+            
+            body.innerHTML = Object.entries(data).map(([tech, count]) => {
+                const pct = ((count / total) * 100).toFixed(1);
+                return `
+                    <tr>
+                        <td><span class="tech-pill ${tech.toLowerCase()}">${tech}</span></td>
+                        <td class="tabular"><span class="drilldown-value" onclick="openCaseModal(${widgetId}, '${tech}')">${count.toLocaleString('es-CL')}</span></td>
+                        <td class="tabular">${pct}%</td>
+                    </tr>
+                `;
+            }).join('');
+
+            panel.classList.add('open');
+        }
+
+        // Close drilldown
+        document.getElementById('drilldownClose').addEventListener('click', () => {
+            document.getElementById('drilldownPanel').classList.remove('open');
+            currentWidgetId = null;
+        });
+
+        // Open case modal
+        let currentModalCases = [];
+        let currentWidget = null;
+        let currentTech = null;
+        let modalMode = 'cases';
+
+        function resetModalSelectors() {
+            const ids = [
+                'modalFilterAssignedPathologist',
+                'modalFilterOrganType',
+                'modalFilterCaseType',
+                'modalFilterMacroPathologist',
+                'modalSearch'
+            ];
+            ids.forEach((id) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.value = '';
+            });
+        }
+
+        function openCaseModal(widgetId, tech) {
+            modalMode = 'cases';
+            resetModalSelectors();
+            currentWidget = widgetId;
+            currentTech = tech;
+            
+            const seed = widgetId * 1000 + (tech ? tech.charCodeAt(0) : 0);
+            const widget = allWidgets.find(w => w && w.id === widgetId);
+            currentModalCases = generateCases(seed, Math.min(widget.value, 100));
+            
+            updateModalContent();
+            document.getElementById('modalOverlay').classList.add('open');
+            
+            const title = tech 
+                ? `Casos — Widget ${String(widgetId).padStart(2, '0')} / ${tech}`
+                : `Casos — Widget ${String(widgetId).padStart(2, '0')}`;
+            document.getElementById('modalTitle').textContent = title;
+        }
+
+        function openBlockModal(widgetId) {
+            modalMode = 'blocks';
+            resetModalSelectors();
+            currentWidget = widgetId;
+            currentTech = null;
+            currentModalCases = generateBlockRows(widgetId);
+
+            updateModalContent();
+            document.getElementById('modalOverlay').classList.add('open');
+
+            const title = `Detalle de Bloques — Widget ${String(widgetId).padStart(2, '0')}`;
+            document.getElementById('modalTitle').textContent = title;
+        }
+
+        function openMedicalCaseModal(widgetId) {
+            modalMode = 'medical';
+            resetModalSelectors();
+            currentWidget = widgetId;
+            currentTech = null;
+            currentModalCases = generateMedicalRows(widgetId);
+
+            updateModalContent();
+            document.getElementById('modalOverlay').classList.add('open');
+
+            const title = `Detalle de Casos — Widget ${String(widgetId).padStart(2, '0')}`;
+            document.getElementById('modalTitle').textContent = title;
+        }
+
+        function openTechModal(widgetId) {
+            modalMode = 'tech';
+            resetModalSelectors();
+            currentWidget = widgetId;
+            currentTech = null;
+
+            const data = techBreakdownData[widgetId] || {};
+            const total = Object.values(data).reduce((a, b) => a + b, 0) || 1;
+
+            currentModalCases = Object.entries(data).map(([tecnica, laminas]) => ({
+                tecnica,
+                laminas,
+                porcentaje: ((laminas / total) * 100).toFixed(1),
+                tipoCaso: '#B#',
+                tipoOrgano: 'Pancreas',
+                patologoAsignado: 'AS',
+                patologoMacro: 'RG',
+                id: tecnica
+            }));
+
+            updateModalContent();
+            document.getElementById('modalOverlay').classList.add('open');
+
+            const title = `Desglose de Láminas — Widget ${String(widgetId).padStart(2, '0')}`;
+            document.getElementById('modalTitle').textContent = title;
+        }
+
+        // Open area modal
+        function openAreaModal(areaId) {
+            modalMode = 'cases';
+            resetModalSelectors();
+            currentWidget = null;
+            currentTech = null;
+            
+            const seed = areaId.charCodeAt(0) * 1000;
+            const indicators = areaIndicators[areaId];
+            const totalValue = indicators.reduce((sum, ind) => sum + ind.value, 0);
+            currentModalCases = generateCases(seed, Math.min(totalValue, 100));
+            
+            updateModalContent();
+            document.getElementById('modalOverlay').classList.add('open');
+            
+            const area = areasData.find(a => a.id === areaId);
+            document.getElementById('modalTitle').textContent = `${area.title} — Indicadores`;
+            
+            // Show area-specific stats
+            document.getElementById('modalStats').innerHTML = indicators.slice(0, 4).map(ind => `
+                <div class="stat-card">
+                    <div class="stat-value">${ind.value.toLocaleString('es-CL')}</div>
+                    <div class="stat-label">${ind.label}</div>
+                </div>
+            `).join('');
+        }
+
+        // Update modal content
+        function updateModalContent() {
+            const filtered = filterCases();
+            renderModalTable(filtered);
+            renderModalStats(filtered);
+        }
+
+        // Filter cases
+        function filterCases() {
+            const assignedPathFilter = document.getElementById('modalFilterAssignedPathologist').value;
+            const organTypeFilter = document.getElementById('modalFilterOrganType').value;
+            const caseTypeFilter = document.getElementById('modalFilterCaseType').value;
+            const macroPathFilter = document.getElementById('modalFilterMacroPathologist').value;
+            const searchFilter = document.getElementById('modalSearch').value.toLowerCase();
+            
+            return currentModalCases.filter(c => {
+                const caseId = (c.id || c.caso || c.bloque || '').toLowerCase();
+                const assigned = c.patologoAsignado || c.patologo || '';
+                const organType = c.tipoOrgano || c.organo || '';
+                const caseType = c.tipoCaso || c.tipo || '';
+                const macroPath = c.patologoMacro || c.patologoAdendum || '';
+
+                if (assignedPathFilter && assigned !== assignedPathFilter) return false;
+                if (organTypeFilter && organType !== organTypeFilter) return false;
+                if (caseTypeFilter && caseType !== caseTypeFilter) return false;
+                if (macroPathFilter && macroPath !== macroPathFilter) return false;
+                if (searchFilter && !caseId.includes(searchFilter)) return false;
+                return true;
+            });
+        }
+
+        // Render modal table
+        function renderModalTable(cases) {
+            const tbody = document.getElementById('modalTableBody');
+
+            if (modalMode === 'blocks') {
+                const thead = document.getElementById('modalTableHead');
+                const dataTable = document.querySelector('.data-table');
+                const isInicio = currentWidget >= 1 && currentWidget <= 5;
+
+                thead.innerHTML = `
+                    <tr>
+                        <th>bloque</th>
+                        <th>tipo bloque</th>
+                        <th>organo</th>
+                        <th>patologo</th>
+                        <th>becado</th>
+                        <th>fase bloque</th>
+                        <th>Fecha inicial bloque</th>
+                        <th>Dias retraso</th>
+                    </tr>
+                `;
+
+                dataTable.classList.add('block-table');
+                dataTable.classList.toggle('phase-inicio', isInicio);
+                dataTable.classList.toggle('phase-incluido', !isInicio);
+
+                tbody.innerHTML = cases.map(c => `
+                    <tr>
+                        <td><strong>${c.bloque}</strong></td>
+                        <td>${c.tipoBloque}</td>
+                        <td>${c.organo}</td>
+                        <td>${c.patologo}</td>
+                        <td>${c.becado}</td>
+                        <td>${c.faseBloque}</td>
+                        <td>${c.fechaInicialBloque}</td>
+                        <td class="tabular">${c.diasRetraso}</td>
+                    </tr>
+                `).join('');
+
+                return;
+            }
+
+            if (modalMode === 'medical') {
+                const thead = document.getElementById('modalTableHead');
+                const dataTable = document.querySelector('.data-table');
+
+                thead.innerHTML = `
+                    <tr>
+                        <th>caso</th>
+                        <th>organo</th>
+                        <th>patologo asignado</th>
+                        <th>becado</th>
+                        <th>Patologo adendum</th>
+                        <th>fase caso</th>
+                        <th>Fecha fase</th>
+                        <th>Dias retraso</th>
+                    </tr>
+                `;
+
+                dataTable.classList.add('medical-table');
+                dataTable.classList.remove('block-table', 'phase-inicio', 'phase-incluido');
+
+                tbody.innerHTML = cases.map(c => `
+                    <tr>
+                        <td><strong>${c.caso}</strong></td>
+                        <td>${c.organo}</td>
+                        <td>${c.patologoAsignado}</td>
+                        <td>${c.becado}</td>
+                        <td>${c.patologoAdendum}</td>
+                        <td>${c.faseCaso}</td>
+                        <td>${c.fechaFase}</td>
+                        <td class="tabular">${c.diasRetraso}</td>
+                    </tr>
+                `).join('');
+
+                return;
+            }
+
+            if (modalMode === 'tech') {
+                const thead = document.getElementById('modalTableHead');
+                const dataTable = document.querySelector('.data-table');
+
+                thead.innerHTML = `
+                    <tr>
+                        <th>Técnica</th>
+                        <th>Láminas</th>
+                        <th>%</th>
+                    </tr>
+                `;
+
+                dataTable.classList.add('tech-table');
+                dataTable.classList.remove('block-table', 'phase-inicio', 'phase-incluido', 'medical-table');
+
+                tbody.innerHTML = cases.map(c => `
+                    <tr>
+                        <td><span class="tech-pill ${c.tecnica.toLowerCase()}">${c.tecnica}</span></td>
+                        <td class="tabular"><span class="drilldown-value" onclick="openCaseModal(${currentWidget}, '${c.tecnica}')">${c.laminas.toLocaleString('es-CL')}</span></td>
+                        <td class="tabular">${c.porcentaje}%</td>
+                    </tr>
+                `).join('');
+
+                return;
+            }
+
+            const thead = document.getElementById('modalTableHead');
+            const dataTable = document.querySelector('.data-table');
+            thead.innerHTML = `
+                <tr>
+                    <th>N° caso</th>
+                    <th>Paciente / Servicio</th>
+                    <th>Tipo</th>
+                    <th>Fase</th>
+                    <th>Patólogo</th>
+                    <th>Días</th>
+                </tr>
+            `;
+            dataTable.classList.remove('block-table', 'phase-inicio', 'phase-incluido', 'medical-table', 'tech-table');
+
+            tbody.innerHTML = cases.map(c => {
+                const tipoClass = c.tipo === '#B#' ? 'biopsy' : 
+                                  c.tipo === '#C#' ? 'citologia' :
+                                  c.tipo === '#I#' ? 'interconsulta' :
+                                  c.tipo === '#BE#' ? 'externa' :
+                                  c.tipo === '#PM#' ? 'molecular' : 'autopsia';
+                const faseClass = c.fase.toLowerCase().replace('ó', 'o').replace('í', 'i');
+                const daysClass = c.dias > 7 ? 'critical' : c.dias > 4 ? 'warning' : '';
+                
+                return `
+                    <tr>
+                        <td><strong>${c.id}</strong></td>
+                        <td>${c.paciente} / ${c.servicio}</td>
+                        <td><span class="case-type ${tipoClass}">${c.tipo}</span></td>
+                        <td><span class="phase-badge ${faseClass}">${c.fase}</span></td>
+                        <td>${c.patologo}</td>
+                        <td class="days-cell ${daysClass}">${c.dias} d</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Render modal stats
+        function renderModalStats(cases) {
+            const statsEl = document.getElementById('modalStats');
+            const filtersEl = document.getElementById('modalFiltersRow');
+            const modalExport = document.getElementById('modalExport');
+
+            if (modalMode === 'blocks' || modalMode === 'medical' || modalMode === 'tech') {
+                statsEl.classList.add('is-hidden');
+                filtersEl.classList.remove('is-hidden');
+                modalExport.classList.add('is-hidden');
+                return;
+            }
+
+            statsEl.classList.remove('is-hidden');
+            filtersEl.classList.remove('is-hidden');
+            modalExport.classList.remove('is-hidden');
+
+            if (currentWidget === null) return; // Area modal has custom stats
+            
+            const total = cases.length;
+            const maxDays = Math.max(...cases.map(c => c.dias));
+            const avgDays = (cases.reduce((sum, c) => sum + c.dias, 0) / total).toFixed(1);
+            const critical = cases.filter(c => c.dias > 7).length;
+            
+            document.getElementById('modalStats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${total.toLocaleString('es-CL')}</div>
+                    <div class="stat-label">Total entidades</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${maxDays}</div>
+                    <div class="stat-label">Máx. días</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${avgDays}</div>
+                    <div class="stat-label">Prom. días</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value critical">${critical}</div>
+                    <div class="stat-label">Críticos (>7 días)</div>
+                </div>
+            `;
+        }
+
+        // Modal filter listeners
+        ['modalFilterAssignedPathologist', 'modalFilterOrganType', 'modalFilterCaseType', 'modalFilterMacroPathologist', 'modalSearch'].forEach(id => {
+            document.getElementById(id).addEventListener('change', updateModalContent);
+            document.getElementById(id).addEventListener('input', updateModalContent);
+        });
+
+        // Close modal
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalOverlay')) closeModal();
+        });
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+        }
+
+        // ESC to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Export CSV
+        document.getElementById('modalExport').addEventListener('click', () => {
+            const cases = filterCases();
+            const headers = ['N° caso', 'Paciente', 'Servicio', 'Tipo', 'Fase', 'Patólogo', 'Días'];
+            const rows = cases.map(c => [c.id, c.paciente, c.servicio, c.tipo, c.fase, c.patologo, c.dias]);
+            
+            const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bi4h_casos_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Export all data
+        document.querySelector('.toolbar .btn-primary').addEventListener('click', () => {
+            const data = {
+                exportDate: new Date().toISOString(),
+                kpis: {
+                    casosActivos: 1247,
+                    alarmasAbiertas: 23,
+                    tatPromedio: 4.2,
+                    adendumPendientes: 154
+                },
+                widgets: allWidgets
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bi4h_export_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Theme is always light - clear any saved preference
+        localStorage.removeItem('theme');
+
+        // Nav item clicks
+        document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Initialize
+        renderWidgets();
+    </script>
+</body>
+</html>
