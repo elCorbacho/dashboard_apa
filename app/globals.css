@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 20% 99%;
+  --foreground: 0 5% 12%;
+  --card: 0 12% 94%;
+  --card-foreground: 0 5% 12%;
+  --popover: 0 17% 97%;
+  --popover-foreground: 0 5% 12%;
+  --primary: 213 100% 50%;
+  --primary-foreground: 0 20% 99%;
+  --secondary: 0 9% 60%;
+  --secondary-foreground: 0 5% 12%;
+  --muted: 0 12% 94%;
+  --muted-foreground: 0 3% 45%;
+  --accent: 0 17% 97%;
+  --accent-foreground: 0 5% 12%;
+  --destructive: 4 100% 59%;
+  --destructive-foreground: 0 20% 99%;
+  --border: 0 10% 82%;
+  --input: 0 10% 82%;
+  --ring: 213 100% 50%;
+  --radius: 0.25rem;
+}
+
+.dark {
+  --background: 0 5% 12%;
+  --foreground: 0 20% 99%;
+  --card: 0 5% 18%;
+  --card-foreground: 0 20% 99%;
+  --popover: 0 5% 18%;
+  --popover-foreground: 0 20% 99%;
+  --primary: 213 100% 50%;
+  --primary-foreground: 0 20% 99%;
+  --secondary: 0 9% 60%;
+  --secondary-foreground: 0 20% 99%;
+  --muted: 0 5% 18%;
+  --muted-foreground: 0 9% 60%;
+  --accent: 0 5% 18%;
+  --accent-foreground: 0 20% 99%;
+  --destructive: 4 100% 59%;
+  --destructive-foreground: 0 20% 99%;
+  --border: 0 3% 39%;
+  --input: 0 3% 39%;
+  --ring: 213 100% 50%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  body {
+    font-family:
+      'Berkeley Mono', 'IBM Plex Mono', 'SFMono-Regular', Menlo, Monaco,
+      Consolas, 'Liberation Mono', 'Courier New', monospace;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

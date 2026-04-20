@@ -1,8 +1,5 @@
 {
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/bi4h_dashboard.html"
-    }
-  ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "outputDirectory": "out"
 }

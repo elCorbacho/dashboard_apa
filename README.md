@@ -1,106 +1,99 @@
-<div align="center">
-  
-  # 🔬 Dashboard BI4H 
-  **Anatomía Patológica — Red UC Christus**
-  
-  <p>
-    <i>Dashboard de Inteligencia de Negocios para el monitoreo en tiempo real de métricas operativas,<br>flujo de casos y alertas por área de procesamiento.</i>
-  </p>
+# Dashboard BI4H (Next.js Static Export)
 
-  <br>
+Migración del dashboard de anatomía patológica a **Next.js App Router** con foco en
+paridad funcional de **Overview** y despliegue estático.
 
-  [![Status](https://img.shields.io/badge/Status-Prototype-blue.svg)]()
-  [![Tech](https://img.shields.io/badge/Tech-HTML%20%7C%20CSS%20%7C%20Vanilla%20JS-f39f37.svg)]()
-  [![License](https://img.shields.io/badge/License-Proprietary-red.svg)]()
+## Estado del proyecto
 
-</div>
+- ✅ Stack migrado a Next.js + TypeScript strict.
+- ✅ Overview funcional con KPIs, toolbar de filtros, widgets, drilldown y modal.
+- ✅ Rutas `widgets`, `areas` y `tecnicas` como placeholders explícitos (v1).
+- ✅ Theming dark/light persistente con `next-themes`.
+- ✅ Configuración de deploy alineada a export estático (`output: 'export'`, `out/`).
+- 📌 Se preservan `index.html` y `bi4h_dashboard.html` como baseline legado para comparación.
 
-<br>
+## Stack técnico
 
-## 📋 Descripción
+- Next.js (App Router)
+- React
+- TypeScript (strict)
+- Tailwind CSS
+- next-themes
+- Framer Motion
+- ESLint + Prettier
+- Vitest (tests unitarios de selectors)
 
-Este proyecto es un **Dashboard web estático** diseñado específicamente para la visualización de KPIs y métricas clave del laboratorio de anatomía patológica. Proporciona a los directores médicos y coordinadores de laboratorio una visión clara y accionable del estado operativo al instante.
-
-### ✨ Características Principales
-
-*   📊 **KPIs en Tiempo Real**: Visualización de casos activos, alarmas abiertas, TAT (Turn Around Time) promedio y adendums pendientes.
-*   🧩 **Widgets por Área**: Desglose detallado por Macroscopía, Inclusión/Corte, Histoquímicas, IHQ/IF, Molecular y Citología.
-*   🔍 **Drill-down Interactivo**: Tablas detalladas que se expanden al hacer clic en los bloques de casos para un análisis profundo.
-*   🧭 **Navegación Intuitiva**: Sidebar lateral con acceso rápido a Overview, Widgets, Áreas y Técnicas.
-*   🎨 **Filtros Avanzados**: Filtrado dinámico en el toolbar por área, umbral de días críticos y patólogo asignado.
-*   📱 **Diseño Adaptativo (Responsive)**: Interfaz moderna que se adapta a desktop, tablets y dispositivos móviles con *Force Light Mode* activado para máxima legibilidad.
-*   🖨️ **Print-Friendly**: Estilos CSS optimizados para ocultar la navegación al imprimir reportes.
-
----
-
-## 🛠️ Stack Tecnológico
-
-El proyecto está construido bajo una arquitectura de **Single-file SPA**, lo que significa que todo el código reside en un único archivo, garantizando la máxima portabilidad sin requerir configuración compleja.
-
-*   **Frontend**: `HTML5` + `CSS3` (Inline) + `Vanilla JavaScript`
-*   **Arquitectura**: Monolito de un solo archivo (`bi4h_dashboard.html`)
-*   **Gestión de Datos**: Datos mockeados en memoria (simulación para prototipo)
-*   **Dependencias**: **Cero dependencias externas**. No requiere Node.js, npm, bundlers (Webpack/Vite) ni servidor backend para su ejecución básica.
-
----
-
-## 📂 Estructura del Proyecto
+## Estructura relevante
 
 ```text
-dashboard_apa/
-├── 📄 bi4h_dashboard.html    # Dashboard completo (Estructura, Estilos y Lógica)
-├── 📖 README.md              # Documentación del proyecto (Este archivo)
-└── ⚙️ .atl/                  # Directorio de configuración para Spec-Driven Development (SDD)
+app/                      # Layouts y rutas App Router
+components/dashboard/     # Shell + componentes de Overview
+components/providers/     # Providers de cliente (theme)
+lib/dashboard/            # Contratos, mock data, selectors y adapter
+index.html                # Baseline legado
+bi4h_dashboard.html       # Baseline legado
 ```
 
----
-
-## 🚀 Cómo Ejecutar (Quick Start)
-
-Ejecutar este dashboard es increíblemente simple. No necesitas instalar nada.
-
-1.  Navega hasta la carpeta del proyecto.
-2.  Abre el archivo `bi4h_dashboard.html` directamente en cualquier navegador web moderno (Chrome, Edge, Safari, Firefox).
-3.  *(Opcional)* Si prefieres visualizarlo a través de un servidor local HTTP:
+## Desarrollo local
 
 ```bash
-# Iniciar un servidor local rápido usando Python 3
-python3 -m http.server 8080
-
-# Luego, abre tu navegador y visita: http://localhost:8080
+npm install
+npm run dev
 ```
 
----
+Abrir `http://localhost:3000`.
 
-## 🧪 Áreas del Laboratorio
+## Scripts disponibles
 
-El dashboard monitorea las siguientes áreas de procesamiento, cada una identificada por los colores institucionales:
+```bash
+npm run dev
+npm run lint
+npm run typecheck
+npm run test
+npm run format:check
+npm run format
+npm run build
+```
 
-| Área | Descripción | Color HEX | Indicador Visual |
-| :--- | :--- | :---: | :---: |
-| **Macro** | Macroscopía | `#0e3566` | 🔵 |
-| **Inclusion** | Inclusión y Corte | `#8a5a14` | 🟤 |
-| **Medicos** | Procesamiento Médico | `#1a5a4f` | 🟢 |
-| **Laboratorio** | Laboratorio General | `#ba1a1a` | 🔴 |
-| **Citología** | Citopatología | `#5a3d8a` | 🟣 |
-| **Molecular** | Biología Molecular | `#006874` | 🩵 |
+> Nota: para este batch de cierre **no se ejecutó build de producción** por restricción de flujo.
 
----
+## Verificación rápida (sin build)
 
-## 🛣️ Roadmap & Futuro del Proyecto
+Checklist sugerido para validar cambios de desarrollo:
 
-**Estado Actual:** Prototipo funcional (MVP) de demostración con datos simulados.
+1. `npm run lint`
+2. `npm run typecheck`
+3. `npm run test`
+4. `npm run format:check`
+5. Validación manual en navegador:
+   - Overview carga con KPIs/widgets/drilldown/modal.
+   - Toggle de tema conserva preferencia tras recarga.
+   - Rutas placeholder muestran mensaje "no implementado".
+   - Comportamiento responsive básico (desktop + mobile).
 
-Para llevar este proyecto a un entorno de **Producción**, se recomienda la siguiente evolución tecnológica:
+## Despliegue en Vercel (static export)
 
-*   🔌 **Integración Backend**: Conexión a una API REST/GraphQL real vinculada al sistema LIS (Laboratory Information System) actual (e.g., Sillab, Coanase).
-*   🔐 **Seguridad**: Implementación de un sistema de Autenticación y Autorización (Login).
-*   ⚛️ **Migración a Framework**: Refactorización hacia **React** o **Next.js** para modularizar los componentes y mejorar la mantenibilidad a gran escala.
-*   🛡️ **TypeScript**: Adopción de tipado estático riguroso para prevenir errores en tiempo de ejecución.
-*   🧪 **Testing**: Implementación de pruebas automatizadas (Unitarias con Jest/Testing Library y E2E con Playwright/Cypress).
+El proyecto está configurado para generar artefacto estático en `out/`:
 
----
+- `next.config.ts` usa `output: 'export'` y `trailingSlash: true`.
+- `vercel.json` define framework `nextjs` y `outputDirectory: "out"`.
 
-<div align="center">
-  <p>Construido con dedicación para la <b>Red de Salud UC Christus</b>.</p>
-</div>
+### Opción A: desde Git (recomendada)
+
+1. Importar el repositorio en Vercel.
+2. Framework Preset: **Next.js**.
+3. Build Command: `npm run build`.
+4. Output Directory: `out`.
+5. Deploy.
+
+### Opción B: CLI
+
+```bash
+npm run build
+vercel --prod
+```
+
+## Adapter pattern
+
+Ver `lib/dashboard/README.md` para la guía de contratos/adapters y cómo reemplazar
+mock data por una futura API sin romper la UI.
