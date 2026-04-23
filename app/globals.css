@@ -64,6 +64,40 @@
   }
 }
 
+/* Theme transition - applied to all elements including pseudo-elements */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* Exclude focus rings - they need instant feedback */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Exclude elements that need instant transitions */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* Table row hover state */
+.table-row-hover {
+  transition: background-color 0.15s ease;
+}
+
+.light .table-row-hover:hover {
+  background-color: hsl(0, 17%, 97%);
+}
+
+.dark .table-row-hover:hover {
+  background-color: hsl(0, 5%, 18%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

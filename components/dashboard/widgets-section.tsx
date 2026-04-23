@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import type { WidgetDefinition, WidgetRow } from '@/lib/dashboard/contracts';
 
 interface WidgetsSectionProps {
@@ -19,9 +20,16 @@ export function WidgetsSection({ rows, onWidgetSelect }: WidgetsSectionProps) {
         </h2>
       </header>
 
-      {rows.map((row) => (
-        <article
+      {rows.map((row, rowIndex) => (
+        <motion.article
           key={row.id}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: rowIndex * 0.05,
+            duration: 0.2,
+            ease: 'easeOut',
+          }}
           className="rounded-md border border-border bg-card p-4"
         >
           <div className="mb-3">
@@ -32,26 +40,31 @@ export function WidgetsSection({ rows, onWidgetSelect }: WidgetsSectionProps) {
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
             {row.widgets.map((widget, index) =>
               widget ? (
-                <button
+                <motion.button
                   key={widget.id}
                   type="button"
                   onClick={() => onWidgetSelect(widget)}
-                  className="rounded-md border border-border bg-background p-3 text-left transition-colors hover:border-primary/50 hover:bg-accent focus-visible:border-primary focus-visible:outline-none"
+                  className="rounded-md border border-border bg-background p-3 text-left"
                   aria-label={`Widget ${widget.id}: ${widget.label}`}
                   title={
                     widget.behavior.type === 'drilldown'
                       ? 'Abrir desglose por técnica'
                       : `Abrir modal ${widget.behavior.variant}`
                   }
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    borderColor: 'hsl(213, 100%, 50%, 0.5)',
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-muted-foreground">
                       {String(widget.id).padStart(2, '0')}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm font-medium">
-                    {widget.label}
-                  </p>
+                  <p className="mt-1 text-sm font-medium">{widget.label}</p>
                   <p className="mt-1 text-2xl font-bold tabular-nums">
                     {widget.value.toLocaleString('es-CL')}
                   </p>
@@ -60,7 +73,7 @@ export function WidgetsSection({ rows, onWidgetSelect }: WidgetsSectionProps) {
                       {widget.thresholdDays} días
                     </p>
                   ) : null}
-                </button>
+                </motion.button>
               ) : (
                 <div
                   key={`placeholder-${row.id}-${index}`}
@@ -70,7 +83,7 @@ export function WidgetsSection({ rows, onWidgetSelect }: WidgetsSectionProps) {
               ),
             )}
           </div>
-        </article>
+        </motion.article>
       ))}
     </section>
   );
