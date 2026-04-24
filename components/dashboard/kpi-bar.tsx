@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { animate, motion, useMotionValue } from 'framer-motion';
+import { animate, motion, useMotionValue, useReducedMotion } from 'framer-motion';
 import type { KpiMetric } from '@/lib/dashboard/contracts';
 import { Card } from '@/lib/ui/components';
 
@@ -16,14 +16,19 @@ const toneClassMap: Record<KpiMetric['tone'], string> = {
 function AnimatedNumber({ value, unit }: { value: number; unit?: string }) {
   const motionValue = useMotionValue(0);
   const [displayValue, setDisplayValue] = useState('0');
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (shouldReduceMotion) {
+      motionValue.set(value);
+      return;
+    }
     const controls = animate(motionValue, value, {
       duration: 0.6,
       ease: 'easeOut',
     });
     return controls.stop;
-  }, [motionValue, value]);
+  }, [motionValue, value, shouldReduceMotion]);
 
   useEffect(() => {
     return motionValue.on('change', (latest) => {

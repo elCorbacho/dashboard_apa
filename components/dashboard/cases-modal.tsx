@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ModalFilters } from '@/components/dashboard/modal-filters';
 import { ModalTable } from '@/components/dashboard/modal-table';
 import {
@@ -31,6 +31,8 @@ export function CasesModal({
   onReset,
   onClose,
 }: CasesModalProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   if (!viewModel) {
     return null;
   }
@@ -59,9 +61,9 @@ export function CasesModal({
               Modal de detalle para {viewModel.widgetLabel}
             </DialogDescription>
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
             >
               <div className="flex items-center gap-2">

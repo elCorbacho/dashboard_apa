@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import type {
   ModalTableSchema,
   ModalVariantRow,
@@ -19,6 +19,7 @@ interface ModalTableProps {
 }
 
 export function ModalTable({ schema, rows }: ModalTableProps) {
+  const shouldReduceMotion = useReducedMotion();
   if (rows.length === 0) {
     return (
       <div className="overflow-x-auto rounded-md border border-border">
@@ -65,7 +66,7 @@ export function ModalTable({ schema, rows }: ModalTableProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{
-                delay: rowIndex * 0.03,
+                delay: shouldReduceMotion ? 0 : rowIndex * 0.03,
                 duration: 0.15,
                 ease: 'easeOut',
               }}

@@ -1,8 +1,31 @@
 import React from 'react';
+import type { ComponentType } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { WidgetsSection } from '@/components/dashboard/widgets-section';
 import type { WidgetRow } from '@/lib/dashboard/contracts';
+
+vi.mock('framer-motion', () => {
+  function createMockMotionComponent(tag: string) {
+    return function MockComponent({ children, ...props }: { children: React.ReactNode }) {
+      const Component = tag as unknown as ComponentType<Record<string, unknown>>;
+      return <Component {...props}>{children}</Component>;
+    };
+  }
+  return {
+    motion: {
+      div: createMockMotionComponent('div'),
+      button: createMockMotionComponent('button'),
+      tr: createMockMotionComponent('tr'),
+      article: createMockMotionComponent('article'),
+      span: createMockMotionComponent('span'),
+    },
+    AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
+    useReducedMotion: () => false,
+    useMotionValue: () => ({ on: vi.fn(), set: vi.fn() }),
+    animate: vi.fn(() => ({ stop: vi.fn() })),
+  };
+});
 
 const mockRows: WidgetRow[] = [
   {

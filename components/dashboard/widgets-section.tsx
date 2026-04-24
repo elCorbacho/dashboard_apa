@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import type { WidgetDefinition, WidgetRow } from '@/lib/dashboard/contracts';
 
 interface WidgetsSectionProps {
@@ -7,6 +7,19 @@ interface WidgetsSectionProps {
 }
 
 export function WidgetsSection({ rows, onWidgetSelect }: WidgetsSectionProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const hoverVariant = shouldReduceMotion
+    ? undefined
+    : {
+        scale: 1.02,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        borderColor: 'hsl(213, 100%, 50%, 0.5)',
+      };
+  const tapVariant = shouldReduceMotion ? undefined : { scale: 0.98 };
+  const transition = shouldReduceMotion
+    ? undefined
+    : ({ duration: 0.2, ease: 'easeOut' } as const);
   const totalVisible = rows.reduce(
     (acc, row) => acc + row.widgets.filter((widget) => widget !== null).length,
     0,
@@ -51,13 +64,9 @@ export function WidgetsSection({ rows, onWidgetSelect }: WidgetsSectionProps) {
                       ? 'Abrir desglose por técnica'
                       : `Abrir modal ${widget.behavior.variant}`
                   }
-                  whileHover={{
-                    scale: 1.02,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                    borderColor: 'hsl(213, 100%, 50%, 0.5)',
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  whileHover={hoverVariant}
+                  whileTap={tapVariant}
+                  transition={transition}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-muted-foreground">
